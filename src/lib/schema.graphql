@@ -1,0 +1,91 @@
+"Valida datos de nivel"
+enum Level{
+    principiante
+    intermedio
+    avanzado
+}
+
+union GlobalSearch = Course| Student | Monitor
+
+
+type Course{
+    _id:ID
+    title:String!
+    teacher:String!
+    description:String
+    topic:String
+    comments:Int
+    people: [Student],
+    level:Level
+}
+
+interface Person{
+    _id:ID!,
+    dni:String!
+    name:String!
+}
+
+
+
+type Student implements Person{
+    _id:ID!,
+    dni:String!,
+    name:String!,
+    lastname:String
+    avatar:String
+}
+
+type Monitor implements Person{
+    _id:ID!,
+    dni:String!
+    name:String!
+    phone:String
+}
+
+input PersonInput{
+    dni:String!
+    name:String!
+    lastname:String
+    phone:String
+    avatar:String
+}
+
+
+
+
+
+input CourseInput{
+    title:String!,
+    teacher:String!,
+    description:String,
+    topic:String,
+    comments:Int,
+    level:Level
+}
+
+type Query {
+    getCourses:[Course],
+    temasTotales(num:Int):Int,
+    getOneCourse(num:ID):Course,
+    knowComments:Int,
+    orderCourses:[Course],
+    getPeople:[Person],
+    getPerson(id:ID):Person,
+    "ejecuta una busqueda global"
+    searchItems(keyword:String!):[GlobalSearch]
+}
+
+type Mutation
+{
+    
+    createCourse(input:CourseInput!):Course,
+    "eliminar un Curso"
+    deleteCourse(_id:String):[Course],
+    "actualizar curso"
+    updateCourse(_id:String,input:CourseInput):Course,
+    "crear studiante"
+    makePerson(input:PersonInput):Person,
+    "agregar persona a un curso"
+    addHumans(courseID:String,personID:String):Course
+
+}
